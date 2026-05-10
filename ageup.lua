@@ -5,7 +5,7 @@ if _G.SyntaxAccessKey ~= "SECRET_KEY_123" then
 end
 _G.SyntaxAccessKey = nil
 
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu'))()
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
    Name = "SYNTAX HUB | +1 AGE",
