@@ -1,7 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu'))()
 
 local GameScripts = {
-    [130526979296684] = {name = "+1 Age Every Click", url = "https://githubusercontent.com"},
+    [130526979296684] = {name = "+1 Age Every Click", url = "https://raw.githubusercontent.com/aresSB/SyntaxHub/refs/heads/main/ageup.lua"},
     [987654321] = {name = "Clicker Sim", url = "https://githubusercontent.com"}
 }
 
