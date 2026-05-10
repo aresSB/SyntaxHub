@@ -61,7 +61,7 @@ if placeId == 130526979296684 then
 
 MainTab:CreateToggle({
        Name = "Auto Obby (TP Loop)",
-       CurrentValue = false,wd
+       CurrentValue = false,
        Flag = "ObbyToggle",
        Callback = function(Value)
           _G.AutoObby = Value
