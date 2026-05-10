@@ -4,10 +4,8 @@ if _G.SyntaxAccessKey ~= "SECRET_KEY_123" then
     return
 end
 
--- Clear the key after use so it can't be reused easily
 _G.SyntaxAccessKey = nil
 
--- YOUR ACTUAL GAME SCRIPT STARTS HERE
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local placeId = game.PlaceId
 local gameName = "Universal"
@@ -23,19 +21,11 @@ local Window = Rayfield:CreateWindow({
    Name = "SYNTAX HUB | " .. gameName,
    LoadingTitle = "Syntax Farmer",
    LoadingSubtitle = "by ares",
-   ConfigurationSaving = {
-      Enabled = true,
-      FolderName = "SyntaxFarmer",
-      FileName = "SyntaxConfig"
-   },
+   ConfigurationSaving = {Enabled = true, FolderName = "SyntaxFarmer", FileName = "SyntaxConfig"},
    KeySystem = true,
    KeySettings = {
       Title = "Syntax Authentication",
-      Subtitle = "Key System",
       Note = "Password is: AgeUP!",
-      FileName = "SyntaxKey",
-      SaveKey = true,
-      GrabKeyFromSite = false,
       Key = {"AgeUP!"}
    }
 })
@@ -43,6 +33,7 @@ local Window = Rayfield:CreateWindow({
 local MainTab = Window:CreateTab("Farming Controls", 4483362458)
 
 if placeId == 130526979296684 then
+    -- 1. Age Loop
     MainTab:CreateToggle({
        Name = "Infinite Age Loop",
        CurrentValue = false,
@@ -51,7 +42,6 @@ if placeId == 130526979296684 then
           _G.AutoAge = Value
           task.spawn(function()
              while _G.AutoAge do
-
                 game:GetService("ReplicatedStorage"):WaitForChild("MouseClicked"):FireServer()
                 task.wait(0.1)
              end
@@ -59,7 +49,8 @@ if placeId == 130526979296684 then
        end,
     })
 
-MainTab:CreateToggle({
+    -- 2. Auto Obby
+    MainTab:CreateToggle({
        Name = "Auto Obby (TP Loop)",
        CurrentValue = false,
        Flag = "ObbyToggle",
@@ -70,10 +61,8 @@ MainTab:CreateToggle({
                 local char = game.Players.LocalPlayer.Character
                 local root = char and char:FindFirstChild("HumanoidRootPart")
                 if root then
-
                     root.CFrame = CFrame.new(farmPos1)
                     task.wait(0.7)
-                    
                     for _, v in pairs(workspace:GetDescendants()) do
                         if v:IsA("ProximityPrompt") then
                             local pPos = v.Parent:IsA("BasePart") and v.Parent.Position or v.Parent:GetPivot().Position
@@ -84,9 +73,7 @@ MainTab:CreateToggle({
                             end
                         end
                     end
-                    
                     task.wait(1.5)
-                    
                     root.CFrame = CFrame.new(farmPos2)
                 end
                 task.wait(1.5)
@@ -94,31 +81,27 @@ MainTab:CreateToggle({
           end)
        end,
     })
+
+    -- 3. Anti-AFK (FIXED)
     MainTab:CreateToggle({
         Name = "Anti AFK",
         CurrentValue = false,
         Flag = "afkToggle",
         Callback = function(Value)
-            -- SET THIS TO true TO START, OR false TO STOP
-        _G.AntiAFK = true 
+            _G.AntiAFK = Value
+            if not _G.AFKConnected then
+                _G.AFKConnected = true
+                game:GetService("Players").LocalPlayer.Idled:Connect(function()
+                    if _G.AntiAFK then
+                        game:GetService("VirtualUser"):CaptureController()
+                        game:GetService("VirtualUser"):ClickButton2(Vector2.new(0, 0))
+                    end
+                end)
+            end
+        end,
+    })
 
--- The logic below only sets up the connection once
-        if not _G.AFKConnected then
-            local player = game:GetService("Players").LocalPlayer
-            local virtualUser = game:GetService("VirtualUser")
-
-    player.Idled:Connect(function()
-        if _G.AntiAFK then
-            virtualUser:CaptureController()
-            virtualUser:ClickButton2(Vector2.new(0, 0))
-            print("Anti-AFK: Prevented kick (Enabled: " .. tostring(_G.AntiAFK) .. ")")
-        else
-            print("Anti-AFK: Player is idle, but script is currently DISABLED.")
-        end
-    end)
-end,
-)}
-    _G.AFKConnected = true
+    -- 4. Auto-Rebirth
     MainTab:CreateToggle({
        Name = "Auto-Rebirth",
        CurrentValue = false,
