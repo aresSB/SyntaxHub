@@ -17,29 +17,29 @@ local Window = Rayfield:CreateWindow({
       Subtitle = "Enter Key",
       Note = "Password is: AgeUP!",
       SaveKey = false,
-      Key = {"AgeUP!"} -- Make sure this matches what you type
+      Key = {"fag!"}
    }
 })
 
+-- EVERYTHING BELOW RUNS ONLY AFTER 'AgeUP!' IS CORRECT
 local scriptData = GameScripts[placeId]
 
 if scriptData then
+    -- THE SECRET HANDSHAKE
+    -- Change 'SECRET_KEY_123' to something random every update
     _G.SyntaxAccessKey = "SECRET_KEY_123" 
 
     Rayfield:Notify({
         Title = "Access Granted",
         Content = "Loading " .. scriptData.name .. "...",
-        Duration = 5 -- Removed the 'Image' line to fix the "Icon" error
+        Duration = 5,
     })
 
     task.wait(1.5)
     Rayfield:Destroy()
-    
-    -- Added a small wait to ensure Rayfield is fully cleared before loading
-    task.wait(0.5) 
     loadstring(game:HttpGet(scriptData.url))()
 else
     Rayfield:Destroy()
     task.wait(0.5)
     game.Players.LocalPlayer:Kick("\n[SYNTAX SYSTEMS]\n\nUnauthorized Experience Detected.")
-en
+end
