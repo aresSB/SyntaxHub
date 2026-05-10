@@ -1,4 +1,4 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu'))()
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local GameScripts = {
     [130526979296684] = {name = "+1 Age Every Click", url = "https://raw.githubusercontent.com/aresSB/SyntaxHub/refs/heads/main/ageup.lua"},
