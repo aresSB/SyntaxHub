@@ -94,7 +94,31 @@ MainTab:CreateToggle({
           end)
        end,
     })
+    MainTab:CreateToggle({
+        Name = "Anti AFK",
+        CurrentValue = false,
+        Flag = "afkToggle",
+        Callback = function(Value)
+            -- SET THIS TO true TO START, OR false TO STOP
+        _G.AntiAFK = true 
 
+-- The logic below only sets up the connection once
+        if not _G.AFKConnected then
+            local player = game:GetService("Players").LocalPlayer
+            local virtualUser = game:GetService("VirtualUser")
+
+    player.Idled:Connect(function()
+        if _G.AntiAFK then
+            virtualUser:CaptureController()
+            virtualUser:ClickButton2(Vector2.new(0, 0))
+            print("Anti-AFK: Prevented kick (Enabled: " .. tostring(_G.AntiAFK) .. ")")
+        else
+            print("Anti-AFK: Player is idle, but script is currently DISABLED.")
+        end
+    end)
+end,
+)}
+    _G.AFKConnected = true
     MainTab:CreateToggle({
        Name = "Auto-Rebirth",
        CurrentValue = false,
