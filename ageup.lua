@@ -16,7 +16,6 @@ local Window = Rayfield:CreateWindow({
 
 local MainTab = Window:CreateTab("Farming Controls", 4483362458)
 
--- 1. Infinite Age Loop (Works in any game with 'MouseClicked' remote)
 MainTab:CreateToggle({
    Name = "Infinite Age Loop",
    CurrentValue = false,
@@ -33,7 +32,6 @@ MainTab:CreateToggle({
    end,
 })
 
--- 2. Auto Obby (Uses detection instead of hard PlaceID)
 MainTab:CreateToggle({
    Name = "Auto Obby (TP Loop)",
    CurrentValue = false,
@@ -65,7 +63,22 @@ MainTab:CreateToggle({
    end,
 })
 
--- 3. Anti-AFK
+MainTab:CreateToggle({
+   Name = "Auto Rebirth",
+   CurrentValue = false,
+   Flag = "RebirthToggle",
+   Callback = function(Value)
+      _G.AutoRebirth = Value
+      task.spawn(function()
+         local rebirthRemote = game:GetService("ReplicatedStorage"):WaitForChild("Rebirth", 5)
+         while _G.AutoRebirth do
+            if rebirthRemote then rebirthRemote:FireServer() end
+            task.wait(0.1)
+         end
+      end)
+   end,
+})
+
 MainTab:CreateToggle({
     Name = "Anti AFK",
     CurrentValue = false,
