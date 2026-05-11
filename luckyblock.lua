@@ -69,31 +69,25 @@ MainTab:CreateToggle({
 
          task.spawn(function()
             local player = game:GetService("Players").LocalPlayer
-            
-            while _G.AutoRebirth
+            while _G.AutoRebirth do -- FIXED: Added 'do'
                pcall(function()
                   local playerGui = player:FindFirstChild("PlayerGui")
                   if playerGui then
                      local mainGui = playerGui:FindFirstChild("MainGui")
-                     if mainGui then
-                        local notifications = mainGui:FindFirstChild("Notifications")
-                        if notifications then
-                           local errorGui = notifications:FindFirstChild("Error")
-                           if errorGui then
-                              errorGui.Visible = false
-                              errorGui:ClearAllChildren()
-                           end
+                     if mainGui and mainGui:FindFirstChild("Notifications") then
+                        local errorGui = mainGui.Notifications:FindFirstChild("Error")
+                        if errorGui then
+                           errorGui.Visible = false
+                           errorGui:ClearAllChildren()
                         end
                      end
                   end
-
                   local errorSound = game:GetService("SoundService").Sounds:FindFirstChild("Error")
                   if errorSound then
                      errorSound.Volume = 0
                      if errorSound.Playing then errorSound:Stop() end
                   end
                end)
-               
                task.wait(0.1)
             end
          end)
