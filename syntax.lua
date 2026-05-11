@@ -15,18 +15,15 @@ local Window = Rayfield:CreateWindow({
    KeySettings = {
       Title = "Access Required",
       Subtitle = "Enter Key",
-      Note = "Password is: AgeUP!",
+      Note = "Password is: fag!",
       SaveKey = false,
       Key = {"fag!"}
    }
 })
 
--- EVERYTHING BELOW RUNS ONLY AFTER 'AgeUP!' IS CORRECT
 local scriptData = GameScripts[placeId]
 
 if scriptData then
-    -- THE SECRET HANDSHAKE
-    -- Change 'SECRET_KEY_123' to something random every update
     _G.SyntaxAccessKey = "SECRET_KEY_123" 
 
     Rayfield:Notify({
