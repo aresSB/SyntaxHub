@@ -1,4 +1,3 @@
--- CHECK FOR HANDSHAKE
 if _G.SyntaxAccessKey ~= "SECRET_KEY_123" then
     game.Players.LocalPlayer:Kick("\n[SYNTAX SECURITY]\n\nDirect Execution Blocked.")
     return
@@ -22,13 +21,24 @@ MainTab:CreateToggle({
    Flag = "SpeedToggle",
    Callback = function(Value)
       _G.AutoAge = Value
-      task.spawn(function()
-         local remote = game:GetService("ReplicatedStorage"):WaitForChild("MouseClicked", 5)
-         while _G.AutoAge do
-            if remote then remote:FireServer() end
-            task.wait(0.1)
-         end
-      end)
+      if Value then
+         task.spawn(function()
+            local addStepsRemote = game:GetService("ReplicatedStorage")
+               :WaitForChild("Packages")
+               :WaitForChild("_Index")
+               :WaitForChild("sleitnick_knit@1.7.0")
+               :WaitForChild("knit")
+               :WaitForChild("Services")
+               :WaitForChild("StepsService")
+               :WaitForChild("RF")
+               :WaitForChild("AddSteps")
+
+            while _G.AutoAge do
+               addStepsRemote:InvokeServer()
+               task.wait(0.1)
+            end
+         end)
+      end
    end,
 })
 
@@ -38,14 +48,98 @@ MainTab:CreateToggle({
    Flag = "RebirthToggle",
    Callback = function(Value)
       _G.AutoRebirth = Value
-      task.spawn(function()
-         local rebirthRemote = game:GetService("ReplicatedStorage"):WaitForChild("Rebirth", 5)
-         while _G.AutoRebirth do
-            if rebirthRemote then rebirthRemote:FireServer() end
-            task.wait(0.1)
-         end
-      end)
+      
+      if Value then
+         task.spawn(function()
+            local rebirthRF = game:GetService("ReplicatedStorage")
+               :WaitForChild("Packages")
+               :WaitForChild("_Index")
+               :WaitForChild("sleitnick_knit@1.7.0")
+               :WaitForChild("knit")
+               :WaitForChild("Services")
+               :WaitForChild("RebirthService")
+               :WaitForChild("RF")
+               :WaitForChild("RequestRebirth")
+
+            while _G.AutoRebirth do
+               pcall(function() rebirthRF:InvokeServer() end)
+               task.wait(0.1)
+            end
+         end)
+
+         task.spawn(function()
+            local player = game:GetService("Players").LocalPlayer
+            
+            while _G.AutoRebirth
+               pcall(function()
+                  local playerGui = player:FindFirstChild("PlayerGui")
+                  if playerGui then
+                     local mainGui = playerGui:FindFirstChild("MainGui")
+                     if mainGui then
+                        local notifications = mainGui:FindFirstChild("Notifications")
+                        if notifications then
+                           local errorGui = notifications:FindFirstChild("Error")
+                           if errorGui then
+                              errorGui.Visible = false
+                              errorGui:ClearAllChildren()
+                           end
+                        end
+                     end
+                  end
+
+                  local errorSound = game:GetService("SoundService").Sounds:FindFirstChild("Error")
+                  if errorSound then
+                     errorSound.Volume = 0
+                     if errorSound.Playing then errorSound:Stop() end
+                  end
+               end)
+               
+               task.wait(0.1)
+            end
+         end)
+      end
    end,
+})
+
+MainTab:CreateDivider()
+
+_G.SpeedValue = 16
+
+MainTab:CreateSlider({
+    Name = "Walkspeed",
+    Range = {16, 200},
+    Increment = 1,
+    Suffix = "Speed",
+    CurrentValue = 16,
+    Flag = "wsSlider",
+    Callback = function(Value)
+        _G.SpeedValue = Value
+        
+        local player = game:GetService("Players").LocalPlayer
+        if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+            player.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = Value
+        end
+    end,
+})
+
+MainTab:CreateToggle({
+    Name = "Walkspeed Loop",
+    CurrentValue = false,
+    Flag = "wsToggle",
+    Callback = function(Value)
+        _G.WSLoop = Value
+        if Value then
+            task.spawn(function()
+                local player = game:GetService("Players").LocalPlayer
+                while _G.WSLoop do
+                    if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+                        player.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = _G.SpeedValue
+                    end
+                    task.wait(0.1)
+                end
+            end)
+        end
+    end,
 })
 
 MainTab:CreateToggle({
